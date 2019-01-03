@@ -18,14 +18,13 @@ public class App {
             String playId = sc.nextLine();
             ids = API.playlist_detail(playId, playlist);
         } else if ("2".equals(temp)) {
-            System.out.print("请输入歌曲id（支持多个id用,隔开）：");
+            System.out.print("请输入歌曲id（支持多个id用','隔开）：");
             String songIds = sc.nextLine();
             ids = API.song_detail(songIds, playlist);
         } else {
             System.out.println("请输入正确类型");
             return;
         }
-        System.out.println("歌曲id:" + ids);
         playlist = API.song_url(ids, playlist);
         System.out.println("解析完成，共下载" + playlist.size() + "首歌曲");
         if (!Util.createDir("music163")) {
@@ -43,5 +42,6 @@ public class App {
                 System.out.println("无法获取下载地址：" + map.get("name"));
             }
         }
+        System.exit(0);
     }
 }

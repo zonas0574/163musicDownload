@@ -16,12 +16,16 @@ public class API {
             System.out.println("解析歌单失败，id:" + id);
             return "";
         }
-        List<Map<String, Object>> playlist = (List<Map<String, Object>>) ((Map<String, Object>) map.get("playlist")).get("tracks");
-        return listToIds(playlist, fileList);
+        List<Map<String, Object>> playlist = (List<Map<String, Object>>) ((Map<String, Object>) map.get("playlist")).get("trackIds");
+        StringBuilder ids = new StringBuilder();
+        for (Map<String, Object> play : playlist) {
+            ids.append(Util.StringToInt(play.get("id").toString())).append(",");
+        }
+        return song_detail(ids.toString(), fileList);
     }
 
     @SuppressWarnings("unchecked")
-    public static String song_detail(String id, List<Map<String, Object>> fileList) {
+    static String song_detail(String id, List<Map<String, Object>> fileList) {
         String url = Util.HOSTURL + "weapi/v3/song/detail?csrf_token=";
         String[] ids = id.split(",");
         StringBuilder c = new StringBuilder();
