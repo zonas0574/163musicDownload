@@ -34,7 +34,7 @@ public class App {
         for (Map<String, Object> map : playlist) {
             if (map.get("url") != null) {
                 byte[] data = Util.fileDownload(map.get("url").toString());
-                FileOutputStream outputStream = new FileOutputStream(new File("music163" + File.separator + map.get("name") + ".mp3"));
+                FileOutputStream outputStream = new FileOutputStream(new File("music163" + File.separator + map.get("name").toString().replaceAll("/","") + ".mp3"));
                 outputStream.write(data);
                 System.out.println("已下载歌曲：" + map.get("name"));
                 outputStream.close();
