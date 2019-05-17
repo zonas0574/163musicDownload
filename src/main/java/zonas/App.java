@@ -33,11 +33,15 @@ public class App {
         }
         for (Map<String, Object> map : playlist) {
             if (map.get("url") != null) {
-                byte[] data = Util.fileDownload(map.get("url").toString());
-                FileOutputStream outputStream = new FileOutputStream(new File("music163" + File.separator + map.get("name").toString().replaceAll("/","") + ".mp3"));
-                outputStream.write(data);
-                System.out.println("已下载歌曲：" + map.get("name"));
-                outputStream.close();
+                try {
+                    byte[] data = Util.fileDownload(map.get("url").toString());
+                    FileOutputStream outputStream = new FileOutputStream(new File("music163" + File.separator + Util.formatFilePath(map.get("name").toString()) + ".mp3"));
+                    outputStream.write(data);
+                    System.out.println("已下载歌曲：" + Util.formatFilePath(map.get("name").toString()));
+                    outputStream.close();
+                } catch (IOException e) {
+                    System.out.println("无法创建歌曲文件：" + map.get("name"));
+                }
             } else {
                 System.out.println("无法获取下载地址：" + map.get("name"));
             }

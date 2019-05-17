@@ -15,14 +15,16 @@ import java.security.GeneralSecurityException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-public class Util {
+class Util {
     private Util() {
     }
 
-    public static final String HOSTURL = "http://music.163.com/";
+    static final String HOSTURL = "http://music.163.com/";
 
-    private static String aesEncrypt(String text, byte[] key, byte[] iv) {
+    static String aesEncrypt(String text, byte[] key, byte[] iv) {
         String encryptText = "";
         try {
             SecretKeySpec keySpec = new SecretKeySpec(key, "AES");
@@ -38,7 +40,7 @@ public class Util {
         return encryptText;
     }
 
-    private static String getParams(String param) {
+    static String getParams(String param) {
         byte[] forthParam = {'0', 'C', 'o', 'J', 'U', 'm', '6', 'Q', 'y', 'w', '8', 'W', '8', 'j', 'u', 'd'};
         byte[] iv = {'0', '1', '0', '2', '0', '3', '0', '4', '0', '5', '0', '6', '0', '7', '0', '8'};
         byte[] secondKey = {'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F'};
@@ -48,7 +50,7 @@ public class Util {
         return encText;
     }
 
-    public static String getJson(String params, String url) {
+    static String getJson(String params, String url) {
         String encSecKey = "257348aecb5e556c066de214e531faadd1c55d814f9be95fd06d6bff9f4c7a41f831f6394d5a3fd2e3881736d94a02ca919d952872e7d0a50ebfa1769a7a62d512f5f1ca21aec60bc3819a9c3ffca5eca9a0dba6d6f7249b06f5965ecfff3695b54e1c28f3f624750ed39e7de08fc8493242e26dbc4484a01c76f739e135637c";
         Map<String, String> data = new HashMap<String, String>();
         data.put("params", getParams(params));
@@ -66,17 +68,17 @@ public class Util {
         return Requests.post(url).socksTimeout(2000).headers(headers).body(data).send().readToText();
     }
 
-    public static Map<String, Object> getMapByJson(String json) {
+    static Map<String, Object> getMapByJson(String json) {
         Gson g = new Gson();
         return g.fromJson(json, new TypeToken<Map<String, Object>>() {
         }.getType());
     }
 
-    public static int StringToInt(String s) {
+    static int StringToInt(String s) {
         return Double.valueOf(s).intValue();
     }
 
-    public static byte[] fileDownload(final String netURL) throws ExecutionException, InterruptedException {
+    static byte[] fileDownload(final String netURL) throws ExecutionException, InterruptedException {
         ExecutorService executorService = Executors.newFixedThreadPool(10);
         Future<byte[]> future = executorService.submit(new Callable<byte[]>() {
             public byte[] call() {
@@ -102,7 +104,7 @@ public class Util {
         return future.get();
     }
 
-    private static byte[] toByteArray(InputStream in) throws IOException {
+    static byte[] toByteArray(InputStream in) throws IOException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         byte[] buffer = new byte[1024 * 4];
         int n = 0;
@@ -112,7 +114,7 @@ public class Util {
         return out.toByteArray();
     }
 
-    public static boolean createDir(String destDirName) {
+    static boolean createDir(String destDirName) {
         File dir = new File(destDirName);
         if (!dir.exists()) {
             return dir.mkdirs();
@@ -120,4 +122,10 @@ public class Util {
         return true;
     }
 
+    static String formatFilePath(String s){
+        String regEx="[:/*?\"<>|]";
+        Pattern p = Pattern.compile(regEx);
+        Matcher m = p.matcher(s);
+        return m.replaceAll("").trim();
+    }
 }

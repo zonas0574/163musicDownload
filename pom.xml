@@ -6,7 +6,7 @@
 
     <groupId>com.zonas</groupId>
     <artifactId>music163Download</artifactId>
-    <version>1.11</version>
+    <version>1.12</version>
     <dependencies>
         <dependency>
             <groupId>commons-codec</groupId>
