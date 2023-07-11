@@ -7,6 +7,10 @@
     <groupId>com.zonas</groupId>
     <artifactId>music163Download</artifactId>
     <version>1.12</version>
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>commons-codec</groupId>
