@@ -11,6 +11,10 @@ import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Path;
 import java.security.GeneralSecurityException;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,6 +27,17 @@ class Util {
     }
 
     static final String HOSTURL = "http://music.163.com/";
+    static String COOKIES = "";
+
+    static {
+        try {
+            COOKIES = Files.readString(Path.of("cookies.txt"), StandardCharsets.UTF_8);
+        } catch (NoSuchFileException e) {
+            System.out.println("cookies.txt not found!");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     static String aesEncrypt(String text, byte[] key, byte[] iv) {
         String encryptText = "";
@@ -65,6 +80,7 @@ class Util {
         headers.put("Origin", HOSTURL);
         headers.put("Referer", HOSTURL);
         headers.put("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36");
+        headers.put("Cookie", COOKIES);
         return Requests.post(url).socksTimeout(2000).headers(headers).body(data).send().readToText();
     }
 
