@@ -26,7 +26,7 @@ public class App {
             return;
         }
         playlist = API.song_url(ids, playlist);
-        System.out.println("解析完成，共下载" + playlist.size() + "首歌曲");
+        System.out.println("解析完成，共下载 " + playlist.size() + " 首歌曲");
         if (!Util.createDir("music163")) {
             System.out.println("创建文件夹失败，退出下载");
             return;
@@ -35,15 +35,15 @@ public class App {
             if (map.get("url") != null) {
                 try {
                     byte[] data = Util.fileDownload(map.get("url").toString());
-                    FileOutputStream outputStream = new FileOutputStream(new File("music163" + File.separator + Util.formatFilePath(map.get("name").toString()) + ".mp3"));
+                    FileOutputStream outputStream = new FileOutputStream("music163" + File.separator + Util.formatFilePath(map.get("name").toString()) + "." + map.get("type").toString());
                     outputStream.write(data);
-                    System.out.println("已下载歌曲：" + Util.formatFilePath(map.get("name").toString()));
+                    System.out.println("已下载歌曲：" + Util.formatFilePath(map.get("name").toString() + "." + map.get("type").toString()));
                     outputStream.close();
                 } catch (IOException e) {
-                    System.out.println("无法创建歌曲文件：" + map.get("name"));
+                    System.out.println("无法创建歌曲文件：" + map.get("name") + "." + map.get("type"));
                 }
             } else {
-                System.out.println("无法获取下载地址：" + map.get("name"));
+                System.out.println("无法获取下载地址：" + map.get("name") + "." + map.get("type"));
             }
         }
         System.exit(0);

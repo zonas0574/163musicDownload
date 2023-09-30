@@ -54,6 +54,7 @@ public class API {
             for (Map<String, Object> aSongList : fileList) {
                 if (Util.StringToInt(song.get("id").toString()) == Util.StringToInt(aSongList.get("id").toString())) {
                     aSongList.put("url", song.get("url"));
+                    aSongList.put("type", song.get("type"));
                 }
             }
 
