@@ -7,7 +7,7 @@ import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 public class App {
-    public static void main(String[] args) throws ExecutionException, InterruptedException, IOException {
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
         Scanner sc = new Scanner(System.in);
         System.out.print("请选择下载类型（1.歌单id 2.歌曲id）：");
         String temp = sc.nextLine();
@@ -32,18 +32,21 @@ public class App {
             return;
         }
         for (Map<String, Object> map : playlist) {
+            String name = map.get("name").toString();
+            String type = map.get("type").toString();
+            String filename = "%s.%s".formatted(name, type);
             if (map.get("url") != null) {
                 try {
                     byte[] data = Util.fileDownload(map.get("url").toString());
-                    FileOutputStream outputStream = new FileOutputStream("music163" + File.separator + Util.formatFilePath(map.get("name").toString()) + "." + map.get("type").toString());
+                    FileOutputStream outputStream = new FileOutputStream("music163" + File.separator + Util.formatFilePath(filename));
                     outputStream.write(data);
-                    System.out.println("已下载歌曲：" + Util.formatFilePath(map.get("name").toString() + "." + map.get("type").toString()));
+                    System.out.println("已下载歌曲：" + Util.formatFilePath(filename));
                     outputStream.close();
                 } catch (IOException e) {
-                    System.out.println("无法创建歌曲文件：" + map.get("name") + "." + map.get("type"));
+                    System.out.println("无法创建歌曲文件：" + filename);
                 }
             } else {
-                System.out.println("无法获取下载地址：" + map.get("name") + "." + map.get("type"));
+                System.out.println("无法获取下载地址：" + filename);
             }
         }
         System.exit(0);

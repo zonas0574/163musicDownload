@@ -72,10 +72,10 @@ public class API {
             List<Map<String, Object>> ar = (List<Map<String, Object>>) map.get("ar");
             StringBuilder name = new StringBuilder();
             for (Map<String, Object> map1 : ar) {
-                name.append(map1.get("name").toString()).append("&");
+                name.append(map1.get("name").toString()).append(",");
             }
             songs.put("id", Util.StringToInt(map.get("id").toString()));
-            songs.put("name", name.substring(0, name.length() - 1) + "-" + map.get("name"));
+            songs.put("name", map.get("name") + " - " + name.substring(0, name.length() - 1));  // 曲名在前歌手在后
             outList.add(songs);
         }
         if (inList.isEmpty()) {
