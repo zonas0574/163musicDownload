@@ -33,9 +33,10 @@ public class App {
         }
         for (Map<String, Object> map : playlist) {
             String name = map.get("name").toString();
-            String type = map.get("type").toString();
-            String filename = "%s.%s".formatted(name, type);
-            if (map.get("url") != null) {
+            Object type = map.get("type");
+            String filename = "%s".formatted(name);
+            if (map.get("url") != null && type != null) {
+                filename += ".%s".formatted(type.toString());
                 try {
                     byte[] data = Util.fileDownload(map.get("url").toString());
                     FileOutputStream outputStream = new FileOutputStream("music163" + File.separator + Util.formatFilePath(filename));
