@@ -69,13 +69,25 @@ public class API {
         for (Map<String, Object> map : inList) {
             songs = new HashMap<String, Object>();
             ids.append(Util.StringToInt(map.get("id").toString())).append(",");
+
+            // 获取歌手信息
             List<Map<String, Object>> ar = (List<Map<String, Object>>) map.get("ar");
-            StringBuilder name = new StringBuilder();
+            StringBuilder singers = new StringBuilder();
             for (Map<String, Object> map1 : ar) {
-                name.append(map1.get("name").toString()).append(",");
+                singers.append(map1.get("name").toString()).append(",");
             }
+
+            // 获取专辑信息
+            Map<String, Object> al = (Map<String, Object>) map.get("al");
+            String album = al.get("name").toString();
+            String pic = null;  // picUrl
+
+            singers.deleteCharAt(singers.length() - 1);
             songs.put("id", Util.StringToInt(map.get("id").toString()));
-            songs.put("name", map.get("name") + " - " + name.substring(0, name.length() - 1));  // 曲名在前歌手在后
+            songs.put("name", map.get("name"));
+            songs.put("singer", singers);
+            songs.put("album", album);
+            songs.put("filename", songs.get("name") + " - " + songs.get("singer"));  // 曲名在前歌手在后
             outList.add(songs);
         }
         if (inList.isEmpty()) {

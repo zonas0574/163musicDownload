@@ -25,24 +25,33 @@ public class App {
             System.out.println("请输入正确类型");
             return;
         }
-        playlist = API.song_url(ids, playlist);
+        API.song_url(ids, playlist);
         System.out.println("解析完成，共下载 " + playlist.size() + " 首歌曲");
         if (!Util.createDir("music163")) {
             System.out.println("创建文件夹失败，退出下载");
             return;
         }
         for (Map<String, Object> map : playlist) {
-            String name = map.get("name").toString();
+            System.out.println();
+            String filename = map.get("filename").toString();
             Object type = map.get("type");
-            String filename = "%s".formatted(name);
             if (map.get("url") != null && type != null) {
-                filename += ".%s".formatted(type.toString());
+                filename = "%s.%s".formatted(filename, type.toString());
                 try {
                     byte[] data = Util.fileDownload(map.get("url").toString());
-                    FileOutputStream outputStream = new FileOutputStream("music163" + File.separator + Util.formatFilePath(filename));
+                    String filepath = "music163" + File.separator + Util.formatFilePath(filename);
+                    FileOutputStream outputStream = new FileOutputStream(filepath);
                     outputStream.write(data);
                     System.out.println("已下载歌曲：" + Util.formatFilePath(filename));
                     outputStream.close();
+
+                    if (AudioTag.setAudioTag(filepath, map.get("name").toString(),
+                            map.get("singer").toString(), map.get("album").toString()))
+                    {
+                        System.out.println("添加标签成功：" + Util.formatFilePath(filename));
+                    } else {
+                        System.out.println("添加标签失败：" + Util.formatFilePath(filename));
+                    }
                 } catch (IOException e) {
                     System.out.println("无法创建歌曲文件：" + filename);
                 }
